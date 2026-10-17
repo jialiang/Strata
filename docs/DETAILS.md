@@ -1272,6 +1272,15 @@ every request unless it says otherwise: Chat settings has a switch, and the API 
 (config default: `"sampling": {"experimental_speed_projection": false}`). Switching drops the conversation cache once. Switched
 off, the output is token for token the stock model's.
 
+**A second, separate choice (layers 8-33).** For the original Qwen3.8-Flash-Next in any quantization (the ISTA, Unsloth
+and NVFP4 GPTQ choices; not `NVFP4-NVIDIA`, whose NVIDIA Open Model License does not allow reducing the model's
+safeguards) setup also offers `data/experimental-speed-projection/Qwen3.8-Flash-Next-experimental-speed-projection-l8-33.gguf`
+(its own question, default no, or `--experimental-projection-l8-33 on`; engine flags `--control-vector-layer-range 8 33`
+with the same `--cvec-mode project --cvec-dir per-layer`). Measured numbers and origin: that folder's README. It never
+runs together with the vector above: setup refuses both flags on, asks about it only when the other is off, replaces
+one with the other on a re-run, and the server refuses a config that loads both. The per-request switch above turns
+whichever one is loaded off.
+
 ---
 
 ## RTX 30 series (sm_86) and Tesla P100 (sm_60): bitwise decode switches on by default
