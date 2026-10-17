@@ -67,6 +67,7 @@ class SetupInputs:
     resident: Any = None
     budget: Any = None
     GGUFFile: Any = None
+    esp_l8: Any = None
 
 
 @dataclass
@@ -121,6 +122,7 @@ def config_for(inp: SetupInputs, lib) -> SetupConfig:
     eng = inp.eng
     engine_ver = inp.engine_ver
     esp = inp.esp
+    esp_l8 = inp.esp_l8
     fam = inp.fam
     family = inp.family
     gpu = inp.gpu
@@ -422,6 +424,8 @@ def config_for(inp: SetupInputs, lib) -> SetupConfig:
         # the package's profile, with llama.cpp's flags (the engine takes the same ones)
         args += ["--control-vector-scaled", f"{esp}:1.0", "--control-vector-layer-range", "4", "44",
                  "--cvec-mode", "project", "--cvec-dir", "per-layer"]
+    if esp_l8 is not None:
+        args += lib.esp_l8_flags(esp_l8)
     cfg = {"exe": engine_exe(eng), "args": args, "cwd": str(ROOT), "tokenizer": str(pack / "tokenizer"),
            "model_name": f"{fam['name']}-{model.lower()}", "log": str(home() / f"strata-{tag.lower()}.log"),
            "lib_dirs": lib_dirs, "port": port}
